@@ -78,18 +78,25 @@ impl<S: Signer> Relay<S> {
 
         let payload = Request::new(next_id, method, params);
 
+        println!("Creating signature...");
         let signature = self
             .signer
             .sign_message(format!(
                 "0x{:x}",
                 H256::from(keccak256(
                     serde_json::to_string(&payload)
-                        .map_err(RelayError::RequestSerdeJson)?
+                        .map_err(|e| {
+                            println!("Signature error: {:?}", e);
+                            RelayError::RequestSerdeJson(e)
+                        })?
                         .as_bytes()
                 ))
             ))
             .await
-            .map_err(RelayError::SignerError)?;
+            .map_err(|e| {
+                println!("Outer signature error: {:?}", e);
+                return RelayError::SignerError(e)
+            })?;
 
         let res = self
             .client

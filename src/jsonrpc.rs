@@ -105,6 +105,14 @@ mod tests {
         assert_eq!(response.data.into_result().unwrap(), 19);
     }
 
+    // #[test]
+    // fn deser_response() {
+    //     let response: Response<u64> =
+    //         serde_json::from_str(r#"{"jsonrpc": "2.0", "result": 19, "id": 1}"#).unwrap();
+    //     assert_eq!(response.id, 1);
+    //     assert_eq!(response.data.into_result().unwrap(), 19);
+    // }
+
     #[test]
     fn ser_request() {
         let request: Request<()> = Request::new(300, "method_name", ());
