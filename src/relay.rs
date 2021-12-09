@@ -98,6 +98,7 @@ impl<S: Signer> Relay<S> {
                 return RelayError::SignerError(e)
             })?;
 
+        println!("Created signature, moving onto client req at: {:?}", self.url.clone());
         let res = self
             .client
             .post(self.url.as_ref())
